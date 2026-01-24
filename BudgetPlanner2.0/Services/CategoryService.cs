@@ -25,5 +25,10 @@ namespace BudgetPlanner2._0.Services
         {
             return categories;
         }
+
+        internal Category GetCategoryById(int id)
+        {
+            return categories.FirstOrDefault(c => c.Id == id);
+        }
     }
 }

@@ -3,9 +3,54 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BudgetPlanner2._0"
+        xmlns:local="clr-namespace:BudgetPlanner2._0" xmlns:viewmodels="clr-namespace:BudgetPlanner2._0.ViewModels" 
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <Grid ColumnDefinitions="auto,*"
+          RowDefinitions="*,*">
+        <ListView x:Name="BudgetListView" 
+                  ItemsSource="{Binding RecurringTransactions}" 
+                  SelectedItem="{Binding SelectedTransaction}"
+                  Margin="10">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Date" Width="120" DisplayMemberBinding="{Binding Date}" />
+                    <GridViewColumn Header="Description" Width="300" DisplayMemberBinding="{Binding Description}" />
+                    <GridViewColumn Header="Amount" Width="100" DisplayMemberBinding="{Binding Amount}" />
+                    <GridViewColumn Header="Category" Width="150" DisplayMemberBinding="{Binding Category.Name}" />
+                </GridView>
+            </ListView.View>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="{Binding Date}" Width="120" />
+                        <TextBlock Text="{Binding Description}" Width="300" />
+                        <TextBlock Text="{Binding Amount}" Width="100" />
+                        <TextBlock Text="{Binding Category.Name}" Width="150" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <ListView x:Name="OneTimeListView" ItemsSource="{Binding OneTimeTransactions}" Margin="10" Grid.Row="1">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Date" Width="120" DisplayMemberBinding="{Binding Date}" />
+                    <GridViewColumn Header="Description" Width="300" DisplayMemberBinding="{Binding Description}" />
+                    <GridViewColumn Header="Amount" Width="100" DisplayMemberBinding="{Binding Amount}" />
+                    <GridViewColumn Header="Category" Width="150" DisplayMemberBinding="{Binding Category.Name}" />
+                </GridView>
+            </ListView.View>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="5">
+                        <TextBlock Text="{Binding Date}" Width="120" />
+                        <TextBlock Text="{Binding Description}" Width="300" />
+                        <TextBlock Text="{Binding Amount}" Width="100" />
+                        <TextBlock Text="{Binding Category.Name}" Width="150" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Window>

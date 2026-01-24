@@ -9,6 +9,7 @@ namespace BudgetPlanner2._0.Services
     public class TransactionService
     {
         private List<Transaction> transactions = new List<Transaction>();
+        CategoryService categoryService = new CategoryService();
         public TransactionService()
         {
             transactions = LoadTransactions();
@@ -26,7 +27,7 @@ namespace BudgetPlanner2._0.Services
         Description = "Månadslön",
         Amount = 32000m,
         Date = new DateTime(2023, 10, 25),
-        CategoryId = 1,
+        Category = categoryService.GetCategoryById(1),
         IsIncome = true,
         RecurrenceType = RecurrenceType.Monthly
     },
@@ -38,7 +39,7 @@ namespace BudgetPlanner2._0.Services
         Description = "Hyra lägenhet",
         Amount = 8500m,
         Date = new DateTime(2023, 10, 01),
-        CategoryId = 2,
+        Category = categoryService.GetCategoryById(2),
         IsIncome = false,
         RecurrenceType = RecurrenceType.Monthly
     },
@@ -50,7 +51,7 @@ namespace BudgetPlanner2._0.Services
         Description = "ICA Kvantum",
         Amount = 1250.50m,
         Date = new DateTime(2023, 10, 12),
-        CategoryId = 3,
+        Category = categoryService.GetCategoryById(3),
         IsIncome = false,
         RecurrenceType = RecurrenceType.None
     },
@@ -62,7 +63,7 @@ namespace BudgetPlanner2._0.Services
         Description = "SL Månadskort",
         Amount = 970m,
         Date = new DateTime(2023, 10, 05),
-        CategoryId = 4,
+        Category = categoryService.GetCategoryById(4),
         IsIncome = false,
         RecurrenceType = RecurrenceType.Monthly
     },
@@ -74,7 +75,7 @@ namespace BudgetPlanner2._0.Services
         Description = "Netflix",
         Amount = 149m,
         Date = new DateTime(2023, 10, 15),
-        CategoryId = 5,
+        Category = categoryService.GetCategoryById(5),
         IsIncome = false,
         RecurrenceType = RecurrenceType.Monthly
     },
@@ -86,7 +87,7 @@ namespace BudgetPlanner2._0.Services
         Description = "Hemförsäkring Årlig",
         Amount = 2400m,
         Date = new DateTime(2023, 05, 10),
-        CategoryId = 2,
+        Category = categoryService.GetCategoryById(2),
         IsIncome = false,
         RecurrenceType = RecurrenceType.Yearly,
         RecurrenceMonth = 5
@@ -99,7 +100,7 @@ namespace BudgetPlanner2._0.Services
         Description = "Sålt gammal cykel",
         Amount = 1500m,
         Date = new DateTime(2023, 10, 18),
-        CategoryId = 5,
+        Category = categoryService.GetCategoryById(5),
         IsIncome = true,
         RecurrenceType = RecurrenceType.None
     },
@@ -111,7 +112,7 @@ namespace BudgetPlanner2._0.Services
         Description = "Middag på stan",
         Amount = 845m,
         Date = new DateTime(2023,10, 20),
-        CategoryId = 3,
+        Category = categoryService.GetCategoryById(3),
         IsIncome = false,
         RecurrenceType = RecurrenceType.None
     }

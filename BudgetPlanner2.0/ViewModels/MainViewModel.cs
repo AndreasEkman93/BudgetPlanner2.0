@@ -22,6 +22,10 @@ namespace BudgetPlanner2._0.ViewModels
         [ObservableProperty]
         ObservableCollection<Transaction> oneTimeTransactions = new ObservableCollection<Transaction>();
 
+        //Fungerar inte atm 
+        [ObservableProperty]
+        Transaction selectedTransaction = new Transaction();
+
         public MainViewModel(TransactionService transactionService, CategoryService categoryService)
         {
             this.transactionService = transactionService;
@@ -29,6 +33,7 @@ namespace BudgetPlanner2._0.ViewModels
             LoadData();
         }
 
+        
         private void LoadData()
         {
             var allTransactions = transactionService.GetAllTransactions();
