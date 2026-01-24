@@ -8,6 +8,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using BudgetPlanner2._0.Services;
+using BudgetPlanner2._0.ViewModels;
 
 namespace BudgetPlanner2._0
 {
@@ -16,9 +18,10 @@ namespace BudgetPlanner2._0
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(MainViewModel mainViewModel)
         {
             InitializeComponent();
+            DataContext = mainViewModel;
         }
     }
 }

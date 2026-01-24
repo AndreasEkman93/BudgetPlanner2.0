@@ -9,5 +9,6 @@ namespace BudgetPlanner2._0.Models.Enums
         None,
         Montly,
         Yearly,
+        Monthly,
     }
 }
