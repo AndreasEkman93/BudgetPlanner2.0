@@ -22,9 +22,15 @@ namespace BudgetPlanner2._0.ViewModels
         [ObservableProperty]
         ObservableCollection<Transaction> oneTimeTransactions = new ObservableCollection<Transaction>();
 
-        //Fungerar inte atm 
         [ObservableProperty]
-        Transaction selectedTransaction = new Transaction();
+        [NotifyCanExecuteChangedFor(nameof(GoToDetailsCommand))]
+        Transaction selectedRecurringTransaction = null!;
+
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(GoToDetailsCommand))]
+        Transaction selectedOneTimeTransaction = null!;
+
+
 
         public MainViewModel(TransactionService transactionService, CategoryService categoryService)
         {
@@ -33,7 +39,22 @@ namespace BudgetPlanner2._0.ViewModels
             LoadData();
         }
 
-        
+        [RelayCommand(CanExecute = nameof(CanShowDetails))]
+        private void GoToDetails()
+        {
+            string text= SelectedOneTimeTransaction != null ? SelectedOneTimeTransaction.Description : SelectedRecurringTransaction.Description;
+            System.Diagnostics.Debug.WriteLine($"Navigerar till detaljer för: {text}");
+        }
+
+        private bool CanShowDetails()
+        {
+            if(SelectedOneTimeTransaction != null || SelectedRecurringTransaction != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
         private void LoadData()
         {
             var allTransactions = transactionService.GetAllTransactions();
@@ -48,6 +69,23 @@ namespace BudgetPlanner2._0.ViewModels
                     OneTimeTransactions.Add(transaction);
                 }
             }
+        }
+        partial void OnSelectedOneTimeTransactionChanged(Transaction value)
+        {
+            if(SelectedRecurringTransaction != null)
+            {
+                SelectedRecurringTransaction = null;
+            }
+            System.Diagnostics.Debug.WriteLine("Selected One-Time Transaction Changed: " + value?.Description);
+        }
+
+        partial void OnSelectedRecurringTransactionChanged(Transaction value)
+        {
+            if(SelectedOneTimeTransaction != null)
+            {
+                SelectedOneTimeTransaction = null;
+            }
+            System.Diagnostics.Debug.WriteLine("Selected Recurring Transaction Changed: " + value?.Description);
         }
     }
 }

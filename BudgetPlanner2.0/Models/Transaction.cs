@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using BudgetPlanner2._0.Models.Enums;
 
@@ -24,5 +25,19 @@ namespace BudgetPlanner2._0.Models
 
         // Only used for yearly recurrence
         public int? RecurrenceMonth { get; set; }
+    
+
+    public string RecurrenceDisplayName
+        {
+            get
+            {
+                if(RecurrenceType == RecurrenceType.Yearly)
+                {
+                    string month = Date.ToString("MMMM",CultureInfo.InvariantCulture);
+                    return $"Yearly ({month})";
+                }
+                return RecurrenceType.ToString();
+            }
+        }
     }
 }
