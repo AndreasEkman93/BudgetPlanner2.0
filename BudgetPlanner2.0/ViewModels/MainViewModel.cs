@@ -24,11 +24,13 @@ namespace BudgetPlanner2._0.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(GoToDetailsCommand))]
-        Transaction selectedRecurringTransaction = null!;
+        private Transaction? selectedRecurring;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(GoToDetailsCommand))]
-        Transaction selectedOneTimeTransaction = null!;
+        private Transaction? selectedOneTime;
+
+        private Transaction? lastActiveTransaction;
 
         [ObservableProperty]
         private object currentView;
@@ -47,23 +49,21 @@ namespace BudgetPlanner2._0.ViewModels
         [RelayCommand(CanExecute = nameof(CanShowDetails))]
         private void GoToDetails()
         {
-            string text= SelectedOneTimeTransaction != null ? SelectedOneTimeTransaction.Description : SelectedRecurringTransaction.Description;
-            System.Diagnostics.Debug.WriteLine($"Navigerar till detaljer för: {text}");
-            CurrentView = new TransactionDetailsViewModel(SelectedOneTimeTransaction ?? SelectedRecurringTransaction,this);
-        }
-
-        private bool CanShowDetails()
-        {
-            if(SelectedOneTimeTransaction != null || SelectedRecurringTransaction != null)
+            var transactionToShow = lastActiveTransaction ?? SelectedOneTime ?? SelectedRecurring;
+            if (transactionToShow == null)
             {
-                return true;
+                System.Diagnostics.Debug.WriteLine("Ingen transaktion vald för detaljer.");
+                return;
             }
-            return false;
+            System.Diagnostics.Debug.WriteLine($"Navigerar till detaljer för: {transactionToShow.Description}");
+            CurrentView = new TransactionDetailsViewModel(transactionToShow,this);
         }
 
-        private void LoadData()
+        private bool CanShowDetails() => SelectedRecurring != null || SelectedOneTime != null;
+
+        private async void LoadData()
         {
-            var allTransactions = transactionService.GetAllTransactions();
+            var allTransactions = await transactionService.GetAllTransactions();
             foreach (var transaction in allTransactions)
             {
                 if (transaction.RecurrenceType != Models.Enums.RecurrenceType.None)
@@ -76,22 +76,29 @@ namespace BudgetPlanner2._0.ViewModels
                 }
             }
         }
-        partial void OnSelectedOneTimeTransactionChanged(Transaction value)
+
+        partial void OnSelectedRecurringChanged(Transaction? value)
         {
-            if(SelectedRecurringTransaction != null)
+            if(value != null)
             {
-                SelectedRecurringTransaction = null;
+                lastActiveTransaction = value;
+                SelectedOneTime = null;
+                GoToDetailsCommand.NotifyCanExecuteChanged();
+                System.Diagnostics.Debug.WriteLine($"Nu är {lastActiveTransaction.Description} vald.");
             }
-            System.Diagnostics.Debug.WriteLine("Selected One-Time Transaction Changed: " + value?.Description);
         }
 
-        partial void OnSelectedRecurringTransactionChanged(Transaction value)
+        partial void OnSelectedOneTimeChanged(Transaction? value)
         {
-            if(SelectedOneTimeTransaction != null)
+            if(value != null)
             {
-                SelectedOneTimeTransaction = null;
+                lastActiveTransaction = value;
+                SelectedRecurring = null;
+                GoToDetailsCommand.NotifyCanExecuteChanged();
+                System.Diagnostics.Debug.WriteLine($"Nu är {lastActiveTransaction.Description} vald.");
             }
-            System.Diagnostics.Debug.WriteLine("Selected Recurring Transaction Changed: " + value?.Description);
         }
+
+
     }
 }

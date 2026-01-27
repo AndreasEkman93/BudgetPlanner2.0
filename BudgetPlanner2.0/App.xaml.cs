@@ -2,10 +2,12 @@
 using System.Data;
 using System.Windows;
 using BudgetPlanner2._0.Data;
+using BudgetPlanner2._0.Repositories;
 using BudgetPlanner2._0.Services;
 using BudgetPlanner2._0.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace BudgetPlanner2._0
 {
@@ -14,36 +16,81 @@ namespace BudgetPlanner2._0
     /// </summary>
     public partial class App : Application
     {
-        private IServiceProvider serviceProvider;
-        protected override void OnStartup(StartupEventArgs e)
+        //private IServiceProvider serviceProvider;
+        //protected override void OnStartup(StartupEventArgs e)
+        //{
+        //    var serviceCollection = new ServiceCollection();
+        //    ConfigureServices(serviceCollection);
+
+        //    serviceProvider = serviceCollection.BuildServiceProvider();
+
+        //    var mainWindow = serviceProvider.GetRequiredService<MainWindow>();
+        //    mainWindow.Show();
+        //}
+
+
+
+        //private void ConfigureServices(IServiceCollection services)
+        //{
+        //    services.AddLogging();
+        //    services.AddSingleton<MainViewModel>();
+        //    services.AddSingleton<MainWindow>();
+        //    services.AddSingleton<TransactionService>();
+        //    services.AddSingleton<CategoryService>();
+        //}
+
+        //private void OnExit(object sender, ExitEventArgs e)
+        //{
+        //    if (serviceProvider is IDisposable disposable)
+        //    {
+        //        disposable.Dispose();
+        //    }
+        //}
+        private readonly IHost host;
+        public App()
         {
-            var serviceCollection = new ServiceCollection();
-            ConfigureServices(serviceCollection);
+            host = Host.CreateDefaultBuilder()
+                .ConfigureServices((context, services) =>
+                {
+                    services.AddDbContext<ApplicationDbContext>(options =>
+                    {
+                        options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BudgetPlanner2.0;Integrated Security=True;Connect Timeout=30;Encrypt=True;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False;Command Timeout=30");
+                    });
 
-            serviceProvider = serviceCollection.BuildServiceProvider();
+                    services.AddScoped<ITransactionRepository, TransactionRepository>();
+                    services.AddScoped<ICategoryRepository, CategoryRepository>();
+                    services.AddScoped<DataSeederService>();
 
-            var mainWindow = serviceProvider.GetRequiredService<MainWindow>();
-            mainWindow.Show();
+                    services.AddSingleton<TransactionService>();
+                    services.AddSingleton<CategoryService>();
+                    services.AddSingleton<MainViewModel>();
+                    services.AddSingleton<MainWindow>();
+
+                })
+                .Build();
         }
 
-        
-
-        private void ConfigureServices(IServiceCollection services)
+        protected override async void OnStartup(StartupEventArgs e)
         {
-            services.AddLogging();
-            services.AddSingleton<MainViewModel>();
-            services.AddSingleton<MainWindow>();
-            services.AddSingleton<TransactionService>();
-            services.AddSingleton<CategoryService>();
-        }
+            await host.StartAsync();
 
-        private void OnExit(object sender, ExitEventArgs e)
-        {
-            if (serviceProvider is IDisposable disposable)
+            using(var scope = host.Services.CreateScope())
             {
-                disposable.Dispose();
+                var seeder = scope.ServiceProvider.GetRequiredService<DataSeederService>();
+                await seeder.SeedAsync();
             }
-        }
-    }
 
+            var mainWindow = host.Services.GetRequiredService<MainWindow>();
+            mainWindow.Show();
+            base.OnStartup(e);
+        }
+
+        protected override async void OnExit(ExitEventArgs e)
+        {
+            await host.StopAsync();
+            host.Dispose();
+            base.OnExit(e);
+        }
+
+    }
 }
