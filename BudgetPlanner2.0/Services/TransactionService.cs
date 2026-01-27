@@ -20,103 +20,21 @@ namespace BudgetPlanner2._0.Services
         {
             var transactionsSeed = new List<Transaction>
 {
-    // 1. Inkomst - Lön (Antar CategoryId 1 är Inkomst/Lön)
-    new Transaction
-    {
-        Id = 1,
-        Description = "Månadslön",
-        Amount = 32000m,
-        Date = new DateTime(2023, 10, 25),
-        Category = categoryService.GetCategoryById(1),
-        IsIncome = true,
-        RecurrenceType = RecurrenceType.Monthly
-    },
+                //Give me a seed of 10 transactions with different recurrence types
+                new Transaction { Id = 1, Description = "Salary", Amount = 5000, Date = new DateTime(2024, 1, 1), CategoryId = 1, IsIncome = true, RecurrenceType = RecurrenceType.Monthly, Category = categoryService.GetCategoryById(1) },
+                new Transaction { Id = 2, Description = "Rent", Amount = 1500, Date = new DateTime(2024, 1, 3), CategoryId = 2, IsIncome = false, RecurrenceType = RecurrenceType.Monthly, Category = categoryService.GetCategoryById(2) },
+                new Transaction { Id = 3, Description = "Gym Membership", Amount = 50, Date = new DateTime(2024, 1, 5), CategoryId = 3, IsIncome = false, RecurrenceType = RecurrenceType.Yearly, RecurrenceMonth = 1, Category = categoryService.GetCategoryById(3) },
+                new Transaction { Id = 4, Description = "Freelance Project", Amount = 800, Date = new DateTime(2024, 1, 10), CategoryId = 1, IsIncome = true, RecurrenceType = RecurrenceType.None, Category = categoryService.GetCategoryById(1) },
+                new Transaction { Id = 5, Description = "Electricity Bill", Amount = 100, Date = new DateTime(2024, 1, 15), CategoryId = 4, IsIncome = false, RecurrenceType = RecurrenceType.Monthly, Category = categoryService.GetCategoryById(4) },
+                new Transaction { Id = 6, Description = "Grocery Shopping", Amount = 200, Date = new DateTime(2024, 1, 20), CategoryId = 5, IsIncome = false, RecurrenceType = RecurrenceType.None, Category = categoryService.GetCategoryById(5) },
+                new Transaction { Id = 7, Description = "Car Insurance", Amount = 600, Date = new DateTime(2024, 2, 1), CategoryId = 2, IsIncome = false, RecurrenceType = RecurrenceType.Yearly, RecurrenceMonth = 2, Category = categoryService.GetCategoryById(2) },
+                new Transaction { Id = 8, Description = "Bonus", Amount = 1200, Date = new DateTime(2024, 2, 15), CategoryId = 1, IsIncome = true, RecurrenceType = RecurrenceType.None, Category = categoryService.GetCategoryById(1) },
+                new Transaction { Id = 9, Description = "Internet Bill", Amount = 60, Date = new DateTime(2024, 2, 20), CategoryId = 4, IsIncome = false, RecurrenceType = RecurrenceType.Monthly, Category = categoryService.GetCategoryById(4) },
+                new Transaction { Id = 10, Description = "Dining Out", Amount = 80, Date = new DateTime(2024, 2, 25), CategoryId = 5, IsIncome = false, RecurrenceType = RecurrenceType.None, Category = categoryService.GetCategoryById(5) }
 
-    // 2. Utgift - Hyra (Antar CategoryId 2 är Boende)
-    new Transaction
-    {
-        Id = 2,
-        Description = "Hyra lägenhet",
-        Amount = 8500m,
-        Date = new DateTime(2023, 10, 01),
-        Category = categoryService.GetCategoryById(2),
-        IsIncome = false,
-        RecurrenceType = RecurrenceType.Monthly
-    },
 
-    // 3. Utgift - Mat (Antar CategoryId 3 är Livsmedel)
-    new Transaction
-    {
-        Id = 3,
-        Description = "ICA Kvantum",
-        Amount = 1250.50m,
-        Date = new DateTime(2023, 10, 12),
-        Category = categoryService.GetCategoryById(3),
-        IsIncome = false,
-        RecurrenceType = RecurrenceType.None
-    },
 
-    // 4. Utgift - Transport (Antar CategoryId 4 är Transport)
-    new Transaction
-    {
-        Id = 4,
-        Description = "SL Månadskort",
-        Amount = 970m,
-        Date = new DateTime(2023, 10, 05),
-        Category = categoryService.GetCategoryById(4),
-        IsIncome = false,
-        RecurrenceType = RecurrenceType.Monthly
-    },
-
-    // 5. Utgift - Nöje (Antar CategoryId 5 är Övrigt/Nöje)
-    new Transaction
-    {
-        Id = 5,
-        Description = "Netflix",
-        Amount = 149m,
-        Date = new DateTime(2023, 10, 15),
-        Category = categoryService.GetCategoryById(5),
-        IsIncome = false,
-        RecurrenceType = RecurrenceType.Monthly
-    },
-
-    // 6. Utgift - Årlig försäkring (Boende)
-    new Transaction
-    {
-        Id = 6,
-        Description = "Hemförsäkring Årlig",
-        Amount = 2400m,
-        Date = new DateTime(2023, 05, 10),
-        Category = categoryService.GetCategoryById(2),
-        IsIncome = false,
-        RecurrenceType = RecurrenceType.Yearly,
-        RecurrenceMonth = 5
-    },
-
-    // 7. Inkomst - Blocketförsäljning (Övrigt)
-    new Transaction
-    {
-        Id = 7,
-        Description = "Sålt gammal cykel",
-        Amount = 1500m,
-        Date = new DateTime(2023, 10, 18),
-        Category = categoryService.GetCategoryById(5),
-        IsIncome = true,
-        RecurrenceType = RecurrenceType.None
-    },
-
-    // 8. Utgift - Restaurangbesök (Livsmedel/Nöje)
-    new Transaction
-    {
-        Id = 8,
-        Description = "Middag på stan",
-        Amount = 845m,
-        Date = new DateTime(2023,10, 20),
-        Category = categoryService.GetCategoryById(3),
-        IsIncome = false,
-        RecurrenceType = RecurrenceType.None
-    }
-};
+            };
             return transactionsSeed;
         }
 
