@@ -30,12 +30,17 @@ namespace BudgetPlanner2._0.ViewModels
         [NotifyCanExecuteChangedFor(nameof(GoToDetailsCommand))]
         Transaction selectedOneTimeTransaction = null!;
 
+        [ObservableProperty]
+        private object currentView;
+
 
 
         public MainViewModel(TransactionService transactionService, CategoryService categoryService)
         {
             this.transactionService = transactionService;
             this.categoryService = categoryService;
+            CurrentView = this;
+
             LoadData();
         }
 
@@ -44,6 +49,7 @@ namespace BudgetPlanner2._0.ViewModels
         {
             string text= SelectedOneTimeTransaction != null ? SelectedOneTimeTransaction.Description : SelectedRecurringTransaction.Description;
             System.Diagnostics.Debug.WriteLine($"Navigerar till detaljer för: {text}");
+            CurrentView = new TransactionDetailsViewModel(SelectedOneTimeTransaction ?? SelectedRecurringTransaction,this);
         }
 
         private bool CanShowDetails()
