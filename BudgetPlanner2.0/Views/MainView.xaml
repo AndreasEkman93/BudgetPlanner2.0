@@ -84,15 +84,19 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Grid Grid.Column="3"
-              Grid.RowSpan="4"
-              VerticalAlignment="Top"
-          >
+        <StackPanel Grid.Column="3"
+                    Grid.RowSpan="4"
+                    VerticalAlignment="Top">
             <Button Content="Details"
                     Style="{StaticResource ModernButtonStyle}"
                     Command="{Binding GoToDetailsCommand}"
                     Margin="0,10,10,10"
                     Height="40"/>
-        </Grid>
+            <Button Content="New Transaction"
+                    Style="{StaticResource ModernButtonStyle}"
+                    Command="{Binding GoToCreateTransactionCommand}"
+                    Margin="0,10,10,10"
+                    Height="40"/>
+        </StackPanel>
     </Grid>
 </UserControl>

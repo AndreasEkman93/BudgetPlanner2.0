@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using BudgetPlanner2._0.Models;
 using BudgetPlanner2._0.Services;
@@ -57,6 +58,13 @@ namespace BudgetPlanner2._0.ViewModels
             }
             System.Diagnostics.Debug.WriteLine($"Navigerar till detaljer för: {transactionToShow.Description}");
             CurrentView = new TransactionDetailsViewModel(transactionToShow,this);
+        }
+
+        [RelayCommand]
+        private async Task GoToCreateTransaction()
+        {
+            var categories = await categoryService.GetAllCategories();
+            CurrentView = new CreateTransactionViewModel(transactionService, this, categories);
         }
 
         private bool CanShowDetails() => SelectedRecurring != null || SelectedOneTime != null;
