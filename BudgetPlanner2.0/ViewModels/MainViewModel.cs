@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Navigation;
 using BudgetPlanner2._0.Models;
 using BudgetPlanner2._0.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
 
 namespace BudgetPlanner2._0.ViewModels
@@ -25,10 +28,12 @@ namespace BudgetPlanner2._0.ViewModels
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(GoToDetailsCommand))]
+        [NotifyCanExecuteChangedFor(nameof(DeleteTransactionCommand))]
         private Transaction? selectedRecurring;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(GoToDetailsCommand))]
+        [NotifyCanExecuteChangedFor(nameof(DeleteTransactionCommand))]
         private Transaction? selectedOneTime;
 
         private Transaction? lastActiveTransaction;
@@ -67,10 +72,40 @@ namespace BudgetPlanner2._0.ViewModels
             CurrentView = new CreateTransactionViewModel(transactionService, this, categories);
         }
 
-        private bool CanShowDetails() => SelectedRecurring != null || SelectedOneTime != null;
-
-        private async void LoadData()
+        [RelayCommand(CanExecute = nameof(CanDeleteTransaction))]
+        private async Task DeleteTransaction()
         {
+            var transactionToDelete = lastActiveTransaction ?? SelectedOneTime ?? SelectedRecurring;
+            if (transactionToDelete == null)
+            {
+                System.Diagnostics.Debug.WriteLine("Ingen transaktion vald för borttagning.");
+                return;
+            }
+            else
+            {
+                MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete {transactionToDelete.Description}?", 
+                                                            "Confirm", 
+                                                            MessageBoxButton.YesNo, 
+                                                            MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    await transactionService.DeleteTransaction(transactionToDelete.Id);
+                    LoadData();
+                }
+                else
+                    return;
+                
+            }
+        }
+
+        private bool CanShowDetails() => SelectedRecurring != null || SelectedOneTime != null;
+        private bool CanDeleteTransaction() => SelectedRecurring != null || SelectedOneTime != null;
+
+        public async void LoadData()
+        {
+            RecurringTransactions.Clear();
+            OneTimeTransactions.Clear();
             var allTransactions = await transactionService.GetAllTransactions();
             foreach (var transaction in allTransactions)
             {

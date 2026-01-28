@@ -8,50 +8,79 @@
              d:DesignHeight="450" d:DesignWidth="800"
              xmlns:viewmodels="clr-namespace:BudgetPlanner2._0.ViewModels"
              d:DataContext="{d:DesignInstance Type=viewmodels:CreateTransactionViewModel}">
-    <Grid>
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="Create New Transaction" FontSize="24" FontWeight="Bold" Foreground="Gray" Margin="0,0,0,20"/>
+    <Grid ColumnDefinitions="*,400,*">
+        <StackPanel Orientation="Vertical" 
+                    Grid.Column="1" 
+                    HorizontalAlignment="Center" 
+                    VerticalAlignment="Center">
+            <TextBlock Text="Create New Transaction" 
+                       FontSize="26" FontWeight="Bold" 
+                       Foreground="Gray" 
+                       Margin="0,0,0,20"/>
 
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="Description:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <TextBox Width="100" Height="30" 
-             Text="{Binding NewTransaction.Description, UpdateSourceTrigger=PropertyChanged}" 
-             />
-            </StackPanel>
-            
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="Amount:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <TextBox Width="100" Height="30" 
-                         Text="{Binding NewTransaction.Amount, UpdateSourceTrigger=PropertyChanged}" 
-                         />
-            </StackPanel>
-            
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="Date:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <DatePicker Width="150" Height="30" 
-                            SelectedDate="{Binding NewTransaction.Date, UpdateSourceTrigger=PropertyChanged}" 
-                            />
-            </StackPanel>
+            <Grid Margin="0,0,0,10" 
+                  ColumnDefinitions="Auto,*">
+                <TextBlock Text="Description:" 
+                           VerticalAlignment="Center" 
+                           Margin="0,0,10,0"/>
+                <TextBox Grid.Column="1"
+                         Text="{Binding NewTransaction.Description, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
 
-            <StackPanel Orientation="Horizontal"  Margin="0,0,0,20">
-                <TextBlock Text="Category:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <ComboBox Width="150" Height="30" 
+            <Grid Margin="0,0,0,10"
+                  ColumnDefinitions="Auto,*">
+                <TextBlock Text="Amount:" 
+                           VerticalAlignment="Center" 
+                           Margin="0,0,10,0"/>
+                <TextBox Grid.Column="1"
+                         Text="{Binding NewTransaction.Amount, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+
+            <Grid Margin="0,0,0,10"
+                  ColumnDefinitions="Auto,*">
+                <TextBlock Text="Date:" 
+                           VerticalAlignment="Center" 
+                           Margin="0,0,10,0"/>
+                <DatePicker Grid.Column="1"
+                            SelectedDate="{Binding NewTransaction.Date, UpdateSourceTrigger=PropertyChanged}"/>
+            </Grid>
+
+            <Grid Margin="0,0,0,10"
+                  ColumnDefinitions="Auto,*">
+                <TextBlock Text="Category:" 
+                           VerticalAlignment="Center" 
+                           Margin="0,0,10,0"/>
+                <ComboBox Grid.Column="1" 
                           ItemsSource="{Binding Categories}" 
                           SelectedItem="{Binding NewTransaction.Category, UpdateSourceTrigger=PropertyChanged}" 
                           DisplayMemberPath="Name"/>
-            </StackPanel>
+            </Grid>
 
             <StackPanel Orientation="Horizontal"  Margin="0,0,0,20">
                 <TextBlock Text="Income:" VerticalAlignment="Center" Margin="0,0,10,0"/>
                 <CheckBox IsChecked="{Binding NewTransaction.IsIncome, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal"  Margin="0,0,0,20">
+            <Grid Margin="0,0,0,10"
+                  ColumnDefinitions="Auto,*">
                 <TextBlock Text="Recurrence:" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <ComboBox Width="150" Height="30" 
+                <ComboBox Grid.Column="1"
                           ItemsSource="{Binding RecurrenceValues}" 
                           SelectedItem="{Binding NewTransaction.RecurrenceType, UpdateSourceTrigger=PropertyChanged}"/>
-            </StackPanel>
+            </Grid>
+            <Grid ColumnDefinitions="*,*">
+                <Button Content="Save"
+                        Style="{StaticResource ModernButtonStyle}"
+                        Command="{Binding SaveTransactionCommand}"
+                        Margin="0,10,10,10"
+                        Height="40"/>
+                <Button Content="Go Back"
+                        Grid.Column="2"
+                        Style="{StaticResource ModernButtonStyle}"
+                        Command="{Binding NavigateBackCommand}"
+                        Margin="0,10,10,10"
+                        Height="40"/>
+            </Grid>
             
         </StackPanel>
     </Grid>
