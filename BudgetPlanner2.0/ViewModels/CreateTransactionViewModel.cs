@@ -62,7 +62,11 @@ namespace BudgetPlanner2._0.ViewModels
                 string errorMessages = validationResults[0].ErrorMessage;
                 System.Windows.MessageBox.Show(errorMessages, "Validation Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
-
+        }
+        [RelayCommand]
+        private void ManageCategory()
+        {
+            MyMainViewModel.CurrentView = new ManageCategoryViewModel(this);
         }
     }
 }

@@ -20,9 +20,13 @@
             <DataTemplate DataType="{x:Type viewmodels:EditTransactionViewModel}">
                 <local:TransactionEditView />
             </DataTemplate>
-            
+
             <DataTemplate DataType="{x:Type viewmodels:MonthlyForecastViewModel}">
                 <local:MonthlyForecastView />
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewmodels:ManageCategoryViewModel}">
+                <local:ManageCategoryView />
             </DataTemplate>
             <Style x:Key="GreenRedListBaseOnIsIncome" TargetType="ListViewItem">
                 <Style.Triggers>
