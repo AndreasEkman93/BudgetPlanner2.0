@@ -7,19 +7,17 @@ using BudgetPlanner2._0.Models.Enums;
 using BudgetPlanner2._0.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using CommunityToolkit.Mvvm.Messaging;
 
 namespace BudgetPlanner2._0.ViewModels
 {
-    public partial class CreateTransactionViewModel:BaseViewModel
+    public partial class EditTransactionViewModel:BaseViewModel
     {
-
         private readonly TransactionService transactionService;
         [ObservableProperty]
         private MainViewModel myMainViewModel;
 
         [ObservableProperty]
-        private Transaction newTransaction = new Transaction() { Date = DateTime.Now };
+        private Transaction currentTransaction;
 
         [ObservableProperty]
         private List<Category> categories;
@@ -29,13 +27,13 @@ namespace BudgetPlanner2._0.ViewModels
 
         public IEnumerable<RecurrenceType> RecurrenceValues => Enum.GetValues(typeof(RecurrenceType)).Cast<RecurrenceType>();
 
-        public CreateTransactionViewModel(TransactionService transactionService, MainViewModel mainViewModel, List<Category> categories)
+        public EditTransactionViewModel(Transaction transaction, TransactionService transactionService, MainViewModel mainViewModel, List<Category> categories)
         {
             this.transactionService = transactionService;
             MyMainViewModel = mainViewModel;
+            CurrentTransaction = transaction;
             Categories = categories;
         }
-
         [RelayCommand]
         private void NavigateBack()
         {
@@ -46,14 +44,15 @@ namespace BudgetPlanner2._0.ViewModels
         private async Task SaveTransaction()
         {
             var validationResults = new List<ValidationResult>();
-            var context = new ValidationContext(NewTransaction);
+            var context = new ValidationContext(CurrentTransaction);
 
-            if (Validator.TryValidateObject(NewTransaction, context, validationResults, true))
+            if (Validator.TryValidateObject(CurrentTransaction, context, validationResults, true))
             {
-                NewTransaction.CategoryId = NewTransaction.Category.Id;
-                NewTransaction.Category = null!;
-                NewTransaction.RecurrenceType = SelectedRecurrence;
-                await transactionService.AddTransaction(NewTransaction);
+                //CurrentTransaction.CategoryId = CurrentTransaction.Category.Id;
+                //CurrentTransaction.Category = null!;
+                //CurrentTransaction.RecurrenceType = SelectedRecurrence;
+                //await transactionService.AddTransaction(CurrentTransaction);
+                await transactionService.UpdateTransaction(CurrentTransaction);
                 MyMainViewModel.LoadData();
                 MyMainViewModel.CurrentView = MyMainViewModel;
             }

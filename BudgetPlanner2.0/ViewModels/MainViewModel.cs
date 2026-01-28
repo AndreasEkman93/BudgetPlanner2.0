@@ -29,11 +29,13 @@ namespace BudgetPlanner2._0.ViewModels
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(GoToDetailsCommand))]
         [NotifyCanExecuteChangedFor(nameof(DeleteTransactionCommand))]
+        [NotifyCanExecuteChangedFor(nameof(GoToEditTransactionCommand))]
         private Transaction? selectedRecurring;
 
         [ObservableProperty]
         [NotifyCanExecuteChangedFor(nameof(GoToDetailsCommand))]
         [NotifyCanExecuteChangedFor(nameof(DeleteTransactionCommand))]
+        [NotifyCanExecuteChangedFor(nameof(GoToEditTransactionCommand))]
         private Transaction? selectedOneTime;
 
         private Transaction? lastActiveTransaction;
@@ -62,7 +64,7 @@ namespace BudgetPlanner2._0.ViewModels
                 return;
             }
             System.Diagnostics.Debug.WriteLine($"Navigerar till detaljer för: {transactionToShow.Description}");
-            CurrentView = new TransactionDetailsViewModel(transactionToShow,this);
+            CurrentView = new TransactionDetailsViewModel(transactionToShow, this);
         }
 
         [RelayCommand]
@@ -70,6 +72,13 @@ namespace BudgetPlanner2._0.ViewModels
         {
             var categories = await categoryService.GetAllCategories();
             CurrentView = new CreateTransactionViewModel(transactionService, this, categories);
+        }
+
+        [RelayCommand(CanExecute = nameof(CanEditTransaction))]
+        private async Task GoToEditTransaction()
+        {
+            var categories = await categoryService.GetAllCategories();
+            CurrentView = new EditTransactionViewModel(lastActiveTransaction!, transactionService, this, categories);
         }
 
         [RelayCommand(CanExecute = nameof(CanDeleteTransaction))]
@@ -83,9 +92,9 @@ namespace BudgetPlanner2._0.ViewModels
             }
             else
             {
-                MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete {transactionToDelete.Description}?", 
-                                                            "Confirm", 
-                                                            MessageBoxButton.YesNo, 
+                MessageBoxResult result = MessageBox.Show($"Are you sure you want to delete {transactionToDelete.Description}?",
+                                                            "Confirm",
+                                                            MessageBoxButton.YesNo,
                                                             MessageBoxImage.Warning);
 
                 if (result == MessageBoxResult.Yes)
@@ -95,11 +104,12 @@ namespace BudgetPlanner2._0.ViewModels
                 }
                 else
                     return;
-                
+
             }
         }
 
         private bool CanShowDetails() => SelectedRecurring != null || SelectedOneTime != null;
+        private bool CanEditTransaction() => SelectedRecurring != null || SelectedOneTime != null;
         private bool CanDeleteTransaction() => SelectedRecurring != null || SelectedOneTime != null;
 
         public async void LoadData()
@@ -122,7 +132,7 @@ namespace BudgetPlanner2._0.ViewModels
 
         partial void OnSelectedRecurringChanged(Transaction? value)
         {
-            if(value != null)
+            if (value != null)
             {
                 lastActiveTransaction = value;
                 SelectedOneTime = null;
@@ -133,7 +143,7 @@ namespace BudgetPlanner2._0.ViewModels
 
         partial void OnSelectedOneTimeChanged(Transaction? value)
         {
-            if(value != null)
+            if (value != null)
             {
                 lastActiveTransaction = value;
                 SelectedRecurring = null;
