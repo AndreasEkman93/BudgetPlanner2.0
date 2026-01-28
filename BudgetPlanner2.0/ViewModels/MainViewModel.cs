@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Navigation;
 using BudgetPlanner2._0.Models;
 using BudgetPlanner2._0.Services;
+using BudgetPlanner2._0.Views;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -72,6 +73,23 @@ namespace BudgetPlanner2._0.ViewModels
         {
             var categories = await categoryService.GetAllCategories();
             CurrentView = new CreateTransactionViewModel(transactionService, this, categories);
+        }
+        [RelayCommand]
+        private async Task GoToMonthlyForecast()
+        {
+            CurrentView = new MonthlyForecastViewModel(RecurringTransactions,OneTimeTransactions,this);
+        }
+        [RelayCommand]
+        private async Task GoToCalculateSalary()
+        {
+            var dialog = new SalaryCalculator();
+            var dialogViewModel = new SalaryCalculatorViewModel();
+            dialog.DataContext = dialogViewModel;
+            
+            if(dialog.ShowDialog() == true)
+            {
+                
+            }
         }
 
         [RelayCommand(CanExecute = nameof(CanEditTransaction))]

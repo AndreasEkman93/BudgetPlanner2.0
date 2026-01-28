@@ -1,0 +1,25 @@
+﻿<Window x:Class="BudgetPlanner2._0.Views.SalaryCalculator"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BudgetPlanner2._0.Views"
+        mc:Ignorable="d"
+        Title="Calculate Salary" Height="270" Width="300"
+        WindowStartupLocation="CenterOwner">
+    <StackPanel Margin="20">
+        <TextBlock Text="Calculate Salary" FontSize="18" FontWeight="Bold" Margin="0,0,0,10"/>
+
+        <TextBlock Text="Enter your annual salary:"/>
+        <TextBox Text="{Binding AnnualSalary, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,15"/>
+
+        <TextBlock Text="Monthly Salary:"/>
+        <TextBlock Text="{Binding MonthlySalary, StringFormat='{}{0:C}'}" 
+                   FontSize="20" FontWeight="Bold" Foreground="Green" Margin="0,5,0,10"/>
+
+        <Button Content="Done" 
+                Margin="0,0,0,0"
+                Click="Done_Click"
+                IsDefault="True" Height="30"/>
+    </StackPanel>
+</Window>

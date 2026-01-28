@@ -48,10 +48,6 @@ namespace BudgetPlanner2._0.ViewModels
 
             if (Validator.TryValidateObject(CurrentTransaction, context, validationResults, true))
             {
-                //CurrentTransaction.CategoryId = CurrentTransaction.Category.Id;
-                //CurrentTransaction.Category = null!;
-                //CurrentTransaction.RecurrenceType = SelectedRecurrence;
-                //await transactionService.AddTransaction(CurrentTransaction);
                 await transactionService.UpdateTransaction(CurrentTransaction);
                 MyMainViewModel.LoadData();
                 MyMainViewModel.CurrentView = MyMainViewModel;

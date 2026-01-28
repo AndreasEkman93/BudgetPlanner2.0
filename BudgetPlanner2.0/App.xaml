@@ -20,6 +20,10 @@
             <DataTemplate DataType="{x:Type viewmodels:EditTransactionViewModel}">
                 <local:TransactionEditView />
             </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type viewmodels:MonthlyForecastViewModel}">
+                <local:MonthlyForecastView />
+            </DataTemplate>
             <Style x:Key="GreenRedListBaseOnIsIncome" TargetType="ListViewItem">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsIncome}" Value="False">
@@ -31,6 +35,18 @@
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
+            <Style x:Key="GreenRedListBaseOnIsTotalAmount" TargetType="ListViewItem">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsNegative}" Value="True">
+                        <Setter Property="Background" Value="#FFFF7F7F"/>
+                        <Setter Property="Opacity" Value="100"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsNegative}" Value="False">
+                        <Setter Property="Background" Value="#FFB2FFB2"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+
             <Style x:Key="ModernButtonStyle" TargetType="Button">
                 <Setter Property="Background" Value="Gray"/>
                 <Setter Property="Foreground" Value="White"/>
