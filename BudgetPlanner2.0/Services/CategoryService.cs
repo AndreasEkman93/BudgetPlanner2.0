@@ -21,9 +21,9 @@ namespace BudgetPlanner2._0.Services
             categories.Add(new Category() { Id = 5, Name = "Entertainment" });
         }
 
-        public List<Category> GetAllCategories()
+        public async Task<List<Category>> GetAllCategories()
         {
-            return categories;
+            return await Task.FromResult(categories);
         }
 
         internal Category GetCategoryById(int id)

@@ -28,6 +28,10 @@ namespace BudgetPlanner2._0.Repositories
 
         public async Task AddAsync(Transaction transaction)
         {
+            if (transaction.Category != null)
+            {
+                context.Entry(transaction.Category).State = EntityState.Unchanged;
+            }
             context.Transactions.Add(transaction);
             await context.SaveChangesAsync();
         }
