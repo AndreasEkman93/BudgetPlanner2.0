@@ -1,34 +1,37 @@
 ﻿using BudgetPlanner2._0.Models;
+using BudgetPlanner2._0.Repositories;
 
 namespace BudgetPlanner2._0.Services
 {
-    
+
     public class CategoryService
     {
-        public List<Category> categories = new List<Category>();
+        private readonly ICategoryRepository categoryRepository;
 
-        public CategoryService()
+        public CategoryService(ICategoryRepository categoryRepository)
         {
-            LoadCategories();
+            this.categoryRepository = categoryRepository;
         }
 
-        private void LoadCategories()
-        {
-            categories.Add(new Category() { Id = 1, Name = "Default" });
-            categories.Add(new Category() { Id = 2, Name = "Transport" });
-            categories.Add(new Category() { Id = 3, Name = "Utilities" });
-            categories.Add(new Category() { Id = 4, Name = "Groceries" });
-            categories.Add(new Category() { Id = 5, Name = "Entertainment" });
-        }
 
         public async Task<List<Category>> GetAllCategories()
         {
-            return await Task.FromResult(categories);
+            return await categoryRepository.GetAllAsync();
         }
 
-        internal Category GetCategoryById(int id)
+        public async Task<Category> GetCategoryById(int id)
         {
-            return categories.FirstOrDefault(c => c.Id == id);
+            return await categoryRepository.GetByIdAsync(id);
+        }
+
+        public async Task UpdateCategory(Category category)
+        {
+            await categoryRepository.UpdateAsync(category);
+        }
+
+        public async Task AddCategory(Category category)
+        {
+            await categoryRepository.AddAsync(category);
         }
     }
 }

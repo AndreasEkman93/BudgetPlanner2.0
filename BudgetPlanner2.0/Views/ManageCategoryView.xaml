@@ -26,7 +26,7 @@
                         Style="{StaticResource ModernButtonStyle}"
                         Margin="0,10,0,0"
                         FontSize="18"
-                        Command="{Binding SaveCommand}" />
+                        Command="{Binding AddCommand}" />
             </StackPanel>
         </Grid>
         <ListView ItemsSource="{Binding Categories}" 
@@ -43,7 +43,13 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        
-        
+        <StackPanel VerticalAlignment="Bottom"
+                    Grid.Row="1">
+            <Button Content="Back" 
+        Style="{StaticResource ModernButtonStyle}"
+        Margin="30,0,30,10"
+        FontSize="20"
+        Command="{Binding BackCommand}" />
+        </StackPanel>
     </Grid>
 </UserControl>

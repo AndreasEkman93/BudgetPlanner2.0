@@ -8,6 +8,7 @@ using BudgetPlanner2._0.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BudgetPlanner2._0.ViewModels
 {
@@ -67,6 +68,12 @@ namespace BudgetPlanner2._0.ViewModels
         private void ManageCategory()
         {
             MyMainViewModel.CurrentView = new ManageCategoryViewModel(this);
+        }
+
+        public async void LoadCategories()
+        {
+            var categoryService = App.Current.Host.Services.GetRequiredService<CategoryService>();
+            Categories = await categoryService.GetAllCategories();
         }
     }
 }
