@@ -46,10 +46,12 @@ namespace BudgetPlanner2._0
         //        disposable.Dispose();
         //    }
         //}
-        private readonly IHost host;
+        //private readonly IHost host;
+        public new static App Current => (App)Application.Current;
+        public IHost Host { get; }
         public App()
         {
-            host = Host.CreateDefaultBuilder()
+            Host = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder()
                 .ConfigureServices((context, services) =>
                 {
                     services.AddDbContext<ApplicationDbContext>(options =>
@@ -60,6 +62,7 @@ namespace BudgetPlanner2._0
                     services.AddScoped<ITransactionRepository, TransactionRepository>();
                     services.AddScoped<ICategoryRepository, CategoryRepository>();
                     services.AddScoped<DataSeederService>();
+                    services.AddTransient<ManageCategoryViewModel>();
 
                     services.AddSingleton<TransactionService>();
                     services.AddSingleton<CategoryService>();
@@ -72,23 +75,23 @@ namespace BudgetPlanner2._0
 
         protected override async void OnStartup(StartupEventArgs e)
         {
-            await host.StartAsync();
+            await Host.StartAsync();
 
-            using(var scope = host.Services.CreateScope())
+            using(var scope = Host.Services.CreateScope())
             {
                 var seeder = scope.ServiceProvider.GetRequiredService<DataSeederService>();
                 await seeder.SeedAsync();
             }
 
-            var mainWindow = host.Services.GetRequiredService<MainWindow>();
+            var mainWindow = Host.Services.GetRequiredService<MainWindow>();
             mainWindow.Show();
             base.OnStartup(e);
         }
 
         protected override async void OnExit(ExitEventArgs e)
         {
-            await host.StopAsync();
-            host.Dispose();
+            await Host.StopAsync();
+            Host.Dispose();
             base.OnExit(e);
         }
 

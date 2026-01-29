@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="BudgetPlanner2._0.Views.ManageCategoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BudgetPlanner2._0.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             xmlns:viewmodels="clr-namespace:BudgetPlanner2._0.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:ManageCategoryViewModel}">
+    <Grid ColumnDefinitions="*,auto,*"
+          RowDefinitions="Auto,*">
+        <Grid Grid.Column="1">
+            <StackPanel>
+            <TextBlock Text="Change the category name"
+                       FontSize="18"
+                       Margin="0,10,0,0"/>
+            <TextBox Text="{Binding SelectedCategory.Name, UpdateSourceTrigger=PropertyChanged}" 
+                    FontSize="18"
+                    />
+            <Button Content="Save changes"
+                    Style="{StaticResource ModernButtonStyle}"
+                    FontSize="18"
+                    Command="{Binding SaveCommand}" />
+                <Button Content="New category" 
+                        Style="{StaticResource ModernButtonStyle}"
+                        Margin="0,10,0,0"
+                        FontSize="18"
+                        Command="{Binding AddCommand}" />
+            </StackPanel>
+        </Grid>
+        <ListView ItemsSource="{Binding Categories}" 
+                  SelectedItem="{Binding SelectedCategory}"
+                  FontSize="18"
+                  HorizontalAlignment="Stretch"
+                  Margin="0,10,0,10"
+                  Grid.Column="1"
+                  Grid.Row="1">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Current Categories"
+                                    DisplayMemberBinding="{Binding Name}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <StackPanel VerticalAlignment="Bottom"
+                    Grid.Row="1">
+            <Button Content="Back" 
+        Style="{StaticResource ModernButtonStyle}"
+        Margin="30,0,30,10"
+        FontSize="20"
+        Command="{Binding BackCommand}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,0 +1,181 @@
+﻿<UserControl x:Class="BudgetPlanner2._0.Views.MonthlyForecastView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BudgetPlanner2._0.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             xmlns:viewmodels="clr-namespace:BudgetPlanner2._0.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:MonthlyForecastViewModel}">
+    <Grid ColumnDefinitions="500, Auto,Auto">
+        <Grid ColumnDefinitions="auto,*,*"
+              RowDefinitions="Auto,*,*"
+                  HorizontalAlignment="Stretch">
+            <ComboBox SelectedValue="{Binding SelectedMonth}"
+                          SelectedValuePath="Tag"
+                          Grid.Column="1"
+                          Margin="10">
+                <ComboBoxItem Tag="1">January</ComboBoxItem>
+                <ComboBoxItem Tag="2">February</ComboBoxItem>
+                <ComboBoxItem Tag="3">March</ComboBoxItem>
+                <ComboBoxItem Tag="4">April</ComboBoxItem>
+                <ComboBoxItem Tag="5">May</ComboBoxItem>
+                <ComboBoxItem Tag="6">June</ComboBoxItem>
+                <ComboBoxItem Tag="7">July</ComboBoxItem>
+                <ComboBoxItem Tag="8">August</ComboBoxItem>
+                <ComboBoxItem Tag="9">September</ComboBoxItem>
+                <ComboBoxItem Tag="10">October</ComboBoxItem>
+                <ComboBoxItem Tag="11">November</ComboBoxItem>
+                <ComboBoxItem Tag="12">December</ComboBoxItem>
+            </ComboBox>
+            <ComboBox Name="YearComboBox" 
+                          ItemsSource="{Binding Years}" 
+                          SelectedItem="{Binding SelectedYear}"
+                          Margin="10"
+                          Grid.Column="2"/>
+
+            <TextBlock Text="RECURRING" 
+                       Grid.Row="0" 
+                       Grid.Column="0"
+                       Grid.RowSpan="2"
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Center"
+                       FontWeight="Bold" Foreground="Gray" Margin="5">
+                <TextBlock.LayoutTransform>
+                    <RotateTransform Angle="-90" />
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+
+            <ListView x:Name="BudgetListView" 
+                      Grid.Row="1"
+                      Grid.Column="1"
+                      Grid.ColumnSpan="2"
+                      Focusable="False"
+                      IsTabStop="false"
+                      ItemsSource="{Binding FilteredRecurring}" 
+                      SelectedItem="{Binding SelectedRecurring}"
+                      Margin="10"
+                      ItemContainerStyle="{StaticResource GreenRedListBaseOnIsIncome}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Date" Width="100">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Date, StringFormat=\{0:yyyy-MM-dd\}}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Description" Width="140" DisplayMemberBinding="{Binding Description}" />
+
+                        <GridViewColumn Header="Amount" Width="100" DisplayMemberBinding="{Binding Amount}" />
+
+                        <GridViewColumn Header="Category" Width="120" DisplayMemberBinding="{Binding Category.Name}" />
+
+                        <GridViewColumn Header="Recurrence" Width="140" DisplayMemberBinding="{Binding RecurrenceDisplayName}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <TextBlock Text="ONE-TIME" 
+       Grid.Row="2" 
+       Grid.Column="0"
+       Grid.RowSpan="2"
+       VerticalAlignment="Center" 
+       HorizontalAlignment="Center"
+       FontWeight="Bold" Foreground="Gray" Margin="5">
+                <TextBlock.LayoutTransform>
+                    <RotateTransform Angle="-90" />
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+
+            <ListView x:Name="OneTimeListView" 
+                      ItemsSource="{Binding FilteredOneTime}"
+                      SelectedItem="{Binding SelectedOneTime}"
+                      Margin="10" 
+                      Grid.Row="3"
+                      Grid.Column="1"
+                      Grid.ColumnSpan="2"
+                      ItemContainerStyle="{StaticResource GreenRedListBaseOnIsIncome}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Date" Width="100">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Date, StringFormat=\{0:yyyy-MM-dd\}}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Description" Width="140" DisplayMemberBinding="{Binding Description}" />
+                        <GridViewColumn Header="Amount" Width="100" DisplayMemberBinding="{Binding Amount}" />
+                        <GridViewColumn Header="Category" Width="120" DisplayMemberBinding="{Binding Category.Name}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </Grid>
+        <StackPanel Grid.Column="1">
+            <Grid ColumnDefinitions="Auto,Auto">
+            <TextBlock Text="Left to spend:"
+                       Margin="10"
+                       FontSize="24"/>
+            <TextBlock Text="{Binding LeftToSpend}"
+                       Margin="10"
+                       FontSize="24"
+                       Grid.Column="1"/>
+            </Grid>
+            <ListView x:Name="CategoryView" 
+                      IsHitTestVisible="False"
+                      Grid.Row="1"
+                      Grid.Column="1"
+                      Focusable="False"
+                      IsTabStop="false"
+                      ItemsSource="{Binding CategorySummaries}"
+                      Margin="10"
+                      ItemContainerStyle="{StaticResource GreenRedListBaseOnIsTotalAmount}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Category" Width="100" DisplayMemberBinding="{Binding CategoryName}" />
+
+                        <GridViewColumn Header="Amount" Width="80" DisplayMemberBinding="{Binding TotalAmount}" />
+
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <!--This will be added if i have time to implement a proper Navigation system
+            <Grid ColumnDefinitions="*,*" 
+                  RowDefinitions="Auto,Auto">
+                <Button Content="Details"
+                        Style="{StaticResource ModernButtonStyle}"
+                        Command="{Binding GoToDetailsCommand}"
+                        Margin="0,10,10,10"
+                        Height="40"/>
+                <Button Content="Edit"
+                        Grid.Column="1"
+                        Style="{StaticResource ModernButtonStyle}"
+                        Command="{Binding GoToEditTransactionCommand}"
+                        Margin="0,10,10,10"
+                        Height="40"/>
+                <Button Content="Delete"
+                        Grid.Column="1"
+                        Grid.Row="1"
+                        Style="{StaticResource ModernButtonStyle}"
+                        Command="{Binding DeleteTransactionCommand}"
+                        Margin="0,10,10,10"
+                        Height="40"/>
+                <Button Content="New Transaction"
+                        Grid.Row="1"
+                        Style="{StaticResource ModernButtonStyle}"
+                        Command="{Binding GoToCreateTransactionCommand}"
+                        Margin="0,10,10,10"
+                        Height="40"/>
+            </Grid>-->
+            <Button Content="Go Back"
+                        Grid.Row="1"
+                        Style="{StaticResource ModernButtonStyle}"
+                        Command="{Binding GoBackCommand}"
+                        Margin="10,10,10,10"
+                        FontSize="24"
+                        Height="80"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
