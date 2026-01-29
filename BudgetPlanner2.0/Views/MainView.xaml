@@ -47,7 +47,7 @@
 
                     <GridViewColumn Header="Category" Width="120" DisplayMemberBinding="{Binding Category.Name}" />
 
-                    <GridViewColumn Header="Recurrence" Width="140" DisplayMemberBinding="{Binding RecurrenceDisplayName}" />
+                    <GridViewColumn Header="Recurrence" Width="100" DisplayMemberBinding="{Binding RecurrenceDisplayName}" />
                 </GridView>
             </ListView.View>
         </ListView>

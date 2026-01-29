@@ -9,24 +9,71 @@
              xmlns:viewmodels="clr-namespace:BudgetPlanner2._0.ViewModels"
              d:DataContext="{d:DesignInstance Type=viewmodels:TransactionDetailsViewModel}">
     <Grid>
-        <TextBlock Text="Transaction Details View" 
-                   HorizontalAlignment="Center" 
+        <StackPanel Orientation="Vertical"
+            Grid.Column="1" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center">
+            <TextBlock Text="{Binding SelectedTransaction.Description}" 
+               FontSize="26" FontWeight="Bold" 
+               Foreground="Gray" 
+               Margin="0,0,0,20"/>
+
+            <Grid Margin="0,0,0,10" 
+          ColumnDefinitions="Auto,*">
+                <TextBlock Text="Description:" 
                    VerticalAlignment="Center" 
-                   FontSize="24" 
-                   FontWeight="Bold" 
-                   Foreground="Gray"/>
-        <TextBlock Text="{Binding SelectedTransaction.Description}"
-                   HorizontalAlignment="Center" 
+                   Margin="0,0,10,0"/>
+                <TextBlock Grid.Column="1"
+                 Text="{Binding SelectedTransaction.Description}" />
+            </Grid>
+
+            <Grid Margin="0,0,0,10"
+          ColumnDefinitions="Auto,*">
+                <TextBlock Text="Amount:" 
                    VerticalAlignment="Center" 
-                   Margin="0,40,0,0"
-                   FontSize="16" 
-                   Foreground="DarkGray"/>
-        <Button Content="Back to Main View" 
-                Command="{Binding NavigateBackCommand}"
-                HorizontalAlignment="Center" 
-                VerticalAlignment="Center" 
-                Margin="0,100,0,0"
-                Width="150"
-                Height="40"/>
+                   Margin="0,0,10,0"/>
+                <TextBlock Grid.Column="1"
+                 Text="{Binding SelectedTransaction.Amount}" />
+            </Grid>
+
+            <Grid Margin="0,0,0,10"
+          ColumnDefinitions="Auto,*">
+                <TextBlock Text="Date:" 
+                   VerticalAlignment="Center" 
+                   Margin="0,0,10,0"/>
+                <TextBlock Grid.Column="1"
+                           Text="{Binding SelectedTransaction.Date, StringFormat=\{0:yyyy-MM-dd\}}"/>
+            </Grid>
+
+            <Grid Margin="0,0,0,10"
+          ColumnDefinitions="Auto,*,*">
+                <TextBlock Text="Category:" 
+                   VerticalAlignment="Center" 
+                   Margin="0,0,10,0"/>
+                <TextBlock Grid.Column="1"
+                           Text="{Binding SelectedTransaction.Category.Name}" />
+            </Grid>
+
+            <StackPanel Orientation="Horizontal"  Margin="0,0,0,20">
+                <TextBlock Text="Income:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <CheckBox IsChecked="{Binding SelectedTransaction.IsIncome}"
+                          IsEnabled="False"/>
+            </StackPanel>
+
+            <Grid Margin="0,0,0,10"
+          ColumnDefinitions="Auto,*">
+                <TextBlock Text="Recurrence:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBlock Grid.Column="1" 
+                           Text="{Binding SelectedTransaction.RecurrenceType}"/>
+            </Grid>
+            <Button Content="Go Back"
+                    Grid.Column="2"
+                    Style="{StaticResource ModernButtonStyle}"
+                    Command="{Binding NavigateBackCommand}"
+                    Margin="0,10,10,10"
+                    Height="40"/>
+            
+
+        </StackPanel>
     </Grid>
 </UserControl>
